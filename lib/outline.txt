@@ -1,0 +1,31 @@
+Needs
+
+nokogiri and open-uri for scraping
+pry for testing
+maybe watir and phantomjs for extra stuff
+
+need a colors class
+need a scraper class
+need a cli
+need an environment
+
+a brief outline of the cli
+
+Users will be able to choose a list of named html colors and be able to find their hexcodes.
+Additionally users will be able to select the colors to find more info like RGB and HSL values
+as well as different tints and shades as well as possible colors to pair with it.
+
+Welcome to color Hex
+
+Please choose from the following list
+ 1. To view a list of the named colors in HTML 
+ 2. Search for a color based on a hex code
+ 3. Search for color schemes based on the hex code
+ (If time allows) 
+ 4. Use the console to open the browser to the appropriate website or display color images
+ 5. Have a way of storing liked colors for reference
+
+ scraping notes:
+ table.css("td.color-name h4")[i].text
+ table.css("td.color-hex.selectable h4").text
+ table.css("td.color-rgb.selectable h4").text
