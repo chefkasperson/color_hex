@@ -30,7 +30,7 @@ class ColorHex::CLI
       case welcome_input
       when "1"
         puts "Here is the list of named html colors"
-        ColorHex::Colors.list_colors
+        ColorHex::Colors.list_html_colors
       when "2"
         puts "Please enter the color's hexadecimal code you would like to search for:"
       when "3"
