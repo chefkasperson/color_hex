@@ -3,12 +3,22 @@
 class ColorHex::CLI
 
   def call
-    puts "Welcome to Color Hex"
+    puts "Welcome to ..."
+    puts <<-DOC
+
+     ____ ___  _     ___  ____    _   _ _______  __
+    / ___/ _ \\| |   / _ \\|  _ \\  | | | | ____\\ \\/ /
+   | |  | | | | |  | | | | |_) | | |_| |  _|  \\  /
+   | |__| |_| | |__| |_| |  _ <  |  _  | |___ /  \\
+    \\____\\___/|_____\\___/|_| \\_\\ |_| |_|_____/_/\\_\\
+
+
+    DOC
     ColorHex::ColorScraper.import
     welcome_options
     welcome_selection
     goodbye
-
+    
   end
   
   def welcome_options
