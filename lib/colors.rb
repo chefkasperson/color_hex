@@ -5,6 +5,7 @@ class ColorHex::Colors
   @@all = []
 
   def initialize
+    @html_name = "none"
     save
   end
 
@@ -22,10 +23,9 @@ class ColorHex::Colors
 
   def self.html_colors
     self.all.select do |color|
-      color.html_name
+      color.html_name unless color.html_name == 'none'
     end
   end
-
 
   def self.list_html_colors
     self.html_colors.each_with_index do |color, i|
@@ -33,11 +33,11 @@ class ColorHex::Colors
     end
   end
 
-  def find_by_hex(hex)
+  def self.find_by_hex(hex)
     self.all.detect { |color| color.hex == hex }
   end
 
-  def create_by_hex(hex)
+  def self.create_by_hex(hex)
     doc = RestClient.get("https://www.thecolorapi.com/id?hex=#{hex}")
     color_hash = JSON.parse(doc)
     new_color = ColorHex::Colors.new
@@ -50,7 +50,7 @@ class ColorHex::Colors
     new_color
   end
 
-  def find_or_create_by_hex(hex)
+  def self.find_or_create_by_hex(hex)
     find_by_hex(hex) || create_by_hex(hex)
   end
 

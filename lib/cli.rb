@@ -6,9 +6,9 @@ class ColorHex::CLI
     puts "Welcome to Color Hex"
     ColorHex::ColorScraper.import
     welcome_options
+    welcome_selection
     goodbye
-    
-    
+
   end
   
   def welcome_options
@@ -17,35 +17,92 @@ class ColorHex::CLI
     
     1. List all the named html colors.
     2. Search for a color based on the hex value.
-    3. Find color schemes based on a color.
-    Type 'exit' to leave anytime
+    Type 'exit' to leave.
     DOC
 
-    welcome_input = nil
+  end
 
-    while welcome_input != "exit" do
-      
-      welcome_input = gets.strip
+  def welcome_selection
+  
+    welcome_input = gets.strip
 
-      case welcome_input
-      when "1"
-        puts "Here is the list of named html colors"
-        ColorHex::Colors.list_html_colors
-      when "2"
-        puts "Please enter the color's hexadecimal code you would like to search for:"
-      when "3"
-        puts "What color would you like to find pairings for?"
-      end
+    case welcome_input
+    when "1"
+      puts "Here is the list of named html colors"
+      ColorHex::Colors.list_html_colors
+      html_color_options
+    when "2"
+      puts "Please enter the hexadecimal color code you would like to search for:"
+      hex_options
+    when "exit"
+      goodbye
+    else
+      welcome_selection
+    end
+    
+  end
+
+  def html_color_options
+    puts <<-DOC
+    Please enter the number of the color you would like more information on: OR
+    Type 'menu' for main menu, 'list' to return to the previous list, or 'exit' to exit  
+    DOC
+
+    html_input = gets.strip
+
+    if html_input.to_i.between?(1, ColorHex::Colors.html_colors.length)
+      color = ColorHex::Colors.html_colors[html_input.to_i-1]
+      color_description(color)
+      html_color_options
+    elsif html_input == 'menu'
+      welcome_options
+      welcome_selection
+    elsif html_input == 'list'
+      ColorHex::Colors.list_html_colors
+      html_color_options
+    elsif html_input == 'exit'
+      goodbye
+    else
+      puts 'Please try again'
+      html_color_options
+    end
+
+  end
+
+  def color_description(color_object)
+    puts <<-DOC
+    Name: #{color_object.name}
+    HTML Name: #{color_object.html_name}
+    Hex Value: #{color_object.hex}
+    RGB Value: #{color_object.rgb}
+    HSV Value: #{color_object.hsv}
+    CMYK Value: #{color_object.cmyk}
+    Image Link: #{color_object.image_link}
+    DOC
+
+  end
+  def hex_options
+    puts "Enter a Hex code to find more information:"
+    hex_input = gets.strip
+    
+    if hex_input.gsub(/[0-9a-fA-F]{6}/, "") == ""
+      color = ColorHex::Colors.find_or_create_by_hex(hex_input)
+      color_description(color)
+      hex_options
+    elsif hex_input == 'exit'
+      goodbye
+    elsif hex_input == 'menu'
+      welcome_options
+      welcome_selection
+    else 
+      puts "Please try again"
+      hex_options
     end
   end
 
   def goodbye
     puts "Thank you"
+    exit
   end
-  
-  
-  
-  
-  
   
 end
