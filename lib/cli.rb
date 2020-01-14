@@ -44,12 +44,24 @@ class ColorHex::CLI
     when "2"
       puts "Please enter the hexadecimal color code you would like to search for:"
       hex_options
+    when "3"
+      puts "Search loaded colors by name"
+      search_options
     when "exit"
       goodbye
     else
       welcome_selection
     end
     
+  end
+
+  def search_options
+    puts 'Under Construction...'
+    puts 'Come back soon'
+
+    welcome_options
+    welcome_selection
+    # search_input = gets.strip
   end
 
   def html_color_options
