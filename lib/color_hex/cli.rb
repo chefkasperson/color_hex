@@ -50,6 +50,7 @@ class ColorHex::CLI
     when "exit"
       goodbye
     else
+      welcome_options
       welcome_selection
     end
     
