@@ -1,0 +1,10 @@
+require 'nokogiri'
+require 'pry'
+require 'open-uri'
+require 'rest-client'
+require 'json'
+require_relative './color_hex/version'
+require_relative './color_hex/cli'
+require_relative './color_hex/colors'
+require_relative './color_hex/color_scraper'
+

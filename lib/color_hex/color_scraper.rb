@@ -1,9 +1,9 @@
-require_relative './color_hex'
-require 'pry'
-require 'nokogiri'
-require 'open-uri'
-require 'rest-client'
-require 'json'
+# require_relative '../Environment'
+# require 'pry'
+# require 'nokogiri'
+# require 'open-uri'
+# require 'rest-client'
+# require 'json'
 
 class ColorHex::ColorScraper
 

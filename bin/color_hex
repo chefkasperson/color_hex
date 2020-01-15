@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require './lib/color_hex'
+require './lib/Environment'
 
 ColorHex::CLI.new.call
