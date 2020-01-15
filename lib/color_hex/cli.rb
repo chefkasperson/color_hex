@@ -2,7 +2,7 @@
 
 class ColorHex::CLI
 
-  attr_accessor = :search_result
+  attr_accessor = :search_result, :color
 
   def call
     puts "Welcome to ..."
@@ -61,6 +61,33 @@ class ColorHex::CLI
     
   end
 
+  def save_options
+    puts "Here are the colors you have saved:"
+    save_list
+    puts <<-DOC
+    Enter the number to view the color, Enter 'u' to unsave a color, Enter 'clear' to unsave all colors
+    Enter 'menu' for main menu, Enter 'exit' to exit
+    DOC
+    save_options_2
+  end
+
+  def save_options_2
+    save_input = gets.strip
+
+    if save_input == 'menu'
+      welcome_options
+      welcome_selection
+    elsif save_input == 'exit'
+      goodbye
+    elsif save_input.to_i.between
+  end
+
+  def save_list
+    ColorHex::Colors.storage.each_with_index do |color|
+      puts "#{i+1} #{color.name}"
+    end
+  end
+
   def search_options
     puts 'What keyword would you like to use:'
 
@@ -103,14 +130,22 @@ class ColorHex::CLI
     selection = gets.strip
     
     if selection.to_i.between?(1, @search_result.length)
-      color_description(@search_result[selection.to_i-1])
+      @color = @search_result[selection.to_i-1]
+      color_description(@color)
       puts ''
-      puts "Enter 'menu' for main menu, 'result' to see the last search result, 'new' for a new search, 'exit' to leave"
+      puts <<-DOC
+      Enter 'menu' for main menu, 'result' to see the last search result, 'save' to store the result,
+      'new' for a new search, 'exit' to leave
+      DOC
       search_options_3
     elsif selection == 'result'
       search_options_2
     elsif selection == 'new'
       search_options
+    elsif selection == 'save'
+      @color.store
+      puts 'The color was saved'
+      search_options_3
     elsif selection == 'exit'
       goodbye
     elsif selection == 'menu'
@@ -130,8 +165,8 @@ class ColorHex::CLI
     html_input = gets.strip
 
     if html_input.to_i.between?(1, ColorHex::Colors.html_colors.length)
-      color = ColorHex::Colors.html_colors[html_input.to_i-1]
-      color_description(color)
+      @color = ColorHex::Colors.html_colors[html_input.to_i-1]
+      color_description(@color)
       html_color_options
     elsif html_input == 'menu'
       welcome_options

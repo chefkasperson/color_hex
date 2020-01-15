@@ -3,7 +3,7 @@ class ColorHex::Colors
   attr_accessor :html_name, :hex, :rgb, :name, :hsv, :cmyk, :image_link
 
   @@all = []
-  @@store = []
+  @@storage = []
 
   def initialize
     @html_name = "none"
@@ -23,11 +23,11 @@ class ColorHex::Colors
   end
 
   def store
-    @@store << self
+    @@storage << self
   end
 
-  def self.store
-    @@store
+  def self.storage
+    @@storage
   end
 
   def self.clear_store
