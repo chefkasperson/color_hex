@@ -2,6 +2,8 @@
 
 class ColorHex::CLI
 
+  attr_accessor = :search_result
+
   def call
     puts "Welcome to ..."
     puts <<-DOC
@@ -27,6 +29,7 @@ class ColorHex::CLI
     
     1. List all the named html colors.
     2. Search for a color based on the hex value.
+    3. Search for a color based on a keyword.
     Type 'exit' to leave.
     DOC
 
@@ -37,17 +40,16 @@ class ColorHex::CLI
     welcome_input = gets.strip
 
     case welcome_input
-    when "1"
-      puts "Here is the list of named html colors"
+    when '1'
+      puts 'Here is the list of named html colors'
       ColorHex::Colors.list_html_colors
       html_color_options
-    when "2"
-      puts "Please enter the hexadecimal color code you would like to search for:"
+    when '2'
+      puts 'Please enter the hexadecimal color code you would like to search for:'
       hex_options
-    when "3"
-      puts "Search loaded colors by name"
+    when '3'
       search_options
-    when "exit"
+    when 'exit'
       goodbye
     else
       welcome_options
@@ -57,12 +59,68 @@ class ColorHex::CLI
   end
 
   def search_options
-    puts 'Under Construction...'
-    puts 'Come back soon'
+    puts 'What keyword would you like to use:'
 
-    welcome_options
-    welcome_selection
+    search_input = gets.strip
+    
+    if search_input == 'exit'
+      goodbye
+    elsif search_input == 'menu'
+      welcome_options
+      welcome_selection    
+    elsif search_input.length > 2 && search_input.gsub(/[A-Za-z]+/, '') == ''
+      @search_result = ColorHex::Colors.all.select do |color|
+        color.html_name.downcase.include?(search_input.downcase) || color.name.include?(search_input.downcase)
+      end
+      search_options_2
+    else
+      puts 'Please enter a valid input'
+      search_options
+    end
+    # puts 'Under Construction...'
+    # puts 'Come back soon'
+
+    # welcome_options
+    # welcome_selection
+  end
   
+  def display_search_result
+    @search_result.uniq.each_with_index do |color, i|
+      puts "#{i+1}. #{color.name}"
+    end
+  end
+
+  def search_options_2
+    if @search_result == nil
+      puts 'No results found'
+      search_options
+    else
+      display_search_result
+      search_options_3
+    end
+  end
+
+  def search_options_3
+    puts 'Enter the number for more information about the color'
+    selection = gets.strip
+    
+    if selection.to_i.between?(1, @search_result.length)
+      color_description(@search_result[selection.to_i-1])
+      puts ''
+      puts "Enter 'menu' for main menu, 'result' to see the last search result, 'new' for a new search, 'exit' to leave"
+      search_options_3
+    elsif selection == 'result'
+      search_options_2
+    elsif selection == 'new'
+      search_options
+    elsif selection == 'exit'
+      goodbye
+    elsif selection == 'menu'
+      menu_options
+      menu_selection
+    else
+      search_optons_3
+    end
   end
 
   def html_color_options
@@ -104,11 +162,12 @@ class ColorHex::CLI
     DOC
 
   end
+
   def hex_options
-    puts "Enter a Hex code to find more information:"
+    puts 'Enter a Hex code to find more information:'
     hex_input = gets.strip
     
-    if hex_input.gsub(/[0-9a-fA-F]{6}/, "") == ""
+    if hex_input.gsub(/[0-9a-fA-F]{6}/, '') == ''
       color = ColorHex::Colors.find_or_create_by_hex(hex_input)
       color_description(color)
       hex_options
@@ -118,7 +177,7 @@ class ColorHex::CLI
       welcome_options
       welcome_selection
     else 
-      puts "Please try again"
+      puts 'Please try again'
       hex_options
     end
   end
