@@ -116,8 +116,8 @@ class ColorHex::CLI
     elsif selection == 'exit'
       goodbye
     elsif selection == 'menu'
-      menu_options
-      menu_selection
+      welcome_options
+      welcome_selection
     else
       search_optons_3
     end
