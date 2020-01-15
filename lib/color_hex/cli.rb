@@ -67,7 +67,7 @@ class ColorHex::CLI
 
   def save_options
     puts "Here are the colors you have saved:"
-    if save_list
+    if ColorHex::Colors.storage.count > 0
       save_list
     else
       puts "You do not have any colors saved"
@@ -90,10 +90,11 @@ class ColorHex::CLI
     elsif save_input == 'clear'
       ColorHex::Colors.clear_store
       welcome
+    elsif save
     elsif save_input.to_i.between?(1, ColorHex::Colors.storage.length)
       @color = ColorHex::Colors.storage[save_input.to_i - 1]
       color_description(@color)
-
+      save_options_2
     else
       puts "I did not understand"
       save_options
