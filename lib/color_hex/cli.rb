@@ -42,11 +42,11 @@ class ColorHex::CLI
 
     case welcome_input
     when '1'
-      puts 'Here is the list of named html colors'
+      puts '  Here is the list of named html colors'
       ColorHex::Colors.list_html_colors
       html_color_options
     when '2'
-      puts 'Please enter the hexadecimal color code you would like to search for:'
+      puts '  Please enter the hexadecimal color code you would like to search for:'
       hex_options
     when '3'
       search_options
@@ -66,11 +66,11 @@ class ColorHex::CLI
   end
 
   def save_options
-    puts "Here are the colors you have saved:"
+    puts "  Here are the colors you have saved:"
     if ColorHex::Colors.storage.count > 0
       save_list
     else
-      puts "You do not have any colors saved"
+      puts "  You do not have any colors saved"
       welcome
     end
     save_options_2
@@ -90,13 +90,15 @@ class ColorHex::CLI
     elsif save_input == 'clear'
       ColorHex::Colors.clear_store
       welcome
-    elsif save
+    elsif save_input == 'u'
+      ColorHex::Colors.storage.delete(@color)
+      save_options
     elsif save_input.to_i.between?(1, ColorHex::Colors.storage.length)
       @color = ColorHex::Colors.storage[save_input.to_i - 1]
       color_description(@color)
       save_options_2
     else
-      puts "I did not understand"
+      puts "  I did not understand"
       save_options
     end
 
@@ -104,12 +106,12 @@ class ColorHex::CLI
 
   def save_list
     ColorHex::Colors.storage.each_with_index do |color, i|
-      puts "#{i+1} #{color.name}"
+      puts "  #{i+1} #{color.name}"
     end
   end
 
   def search_options
-    puts 'What keyword would you like to use:'
+    puts '  What keyword would you like to use:'
 
     search_input = gets.strip
     
@@ -123,14 +125,14 @@ class ColorHex::CLI
       end
       search_options_2
     else
-      puts 'Please enter a valid input'
+      puts '  Please enter a valid input'
       search_options
     end
   end
   
   def display_search_result
     @search_result.uniq.each_with_index do |color, i|
-      puts "#{i+1}. #{color.name}"
+      puts "  #{i+1}. #{color.name}"
     end
   end
 
@@ -145,7 +147,7 @@ class ColorHex::CLI
   end
 
   def search_options_3
-    puts 'Enter the number for more information about the color'
+    puts '  Enter the number for more information about the color'
     selection = gets.strip
     
     if selection.to_i.between?(1, @search_result.length)
@@ -163,7 +165,7 @@ class ColorHex::CLI
       search_options
     elsif selection == 'save'
       @color.store
-      puts 'The color was saved'
+      puts '  The color was saved'
       search_options_3
     elsif selection == 'exit'
       goodbye
@@ -185,11 +187,11 @@ class ColorHex::CLI
     if html_input.to_i.between?(1, ColorHex::Colors.html_colors.length)
       @color = ColorHex::Colors.html_colors[html_input.to_i-1]
       color_description(@color)
-      puts "Enter 'save' to store the color"
+      puts "  Enter 'save' to store the color"
       html_color_options
     elsif html_input == 'save'
       @color.store
-      puts 'The color was saved'
+      puts '  The color was saved'
       html_color_options
     elsif html_input == 'menu'
       welcome
@@ -199,7 +201,7 @@ class ColorHex::CLI
     elsif html_input == 'exit'
       goodbye
     else
-      puts 'Please try again'
+      puts '  Please try again'
       html_color_options
     end
 
@@ -219,30 +221,30 @@ class ColorHex::CLI
   end
 
   def hex_options
-    puts 'Enter a Hex code to find more information:'
+    puts '  Enter a Hex code to find more information:'
     hex_input = gets.strip
     
     if hex_input.gsub(/[0-9a-fA-F]{6}/, '') == ''
       @color = ColorHex::Colors.find_or_create_by_hex(hex_input)
       color_description(@color)
-      puts "Enter 'save' to store the color"
+      puts "  Enter 'save' to store the color"
       hex_options
     elsif hex_input == 'save'
       @color.store
-      puts 'The color was saved'
+      puts '  The color was saved'
       hex_options
     elsif hex_input == 'exit'
       goodbye
     elsif hex_input == 'menu'
       welcome
     else 
-      puts 'Please try again'
+      puts '  Please try again'
       hex_options
     end
   end
 
   def goodbye
-    puts "Thank you"
+    puts "  Thank you"
     exit
   end
   
