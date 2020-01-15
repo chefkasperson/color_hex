@@ -31,7 +31,7 @@ class ColorHex::Colors
   end
 
   def self.clear_store
-    @@store.clear
+    @@storage.clear
   end
 
   def self.html_colors

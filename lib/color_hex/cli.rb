@@ -55,35 +55,54 @@ class ColorHex::CLI
     when 'exit'
       goodbye
     else
-      welcome_options
-      welcome_selection
+      welcome
     end
     
   end
 
+  def welcome
+    welcome_options
+    welcome_selection
+  end
+
   def save_options
     puts "Here are the colors you have saved:"
-    save_list
+    if save_list
+      save_list
+    else
+      puts "You do not have any colors saved"
+      welcome
+    end
+    save_options_2
+  end
+  
+  def save_options_2
     puts <<-DOC
     Enter the number to view the color, Enter 'u' to unsave a color, Enter 'clear' to unsave all colors
     Enter 'menu' for main menu, Enter 'exit' to exit
     DOC
-    save_options_2
-  end
-
-  def save_options_2
     save_input = gets.strip
 
     if save_input == 'menu'
-      welcome_options
-      welcome_selection
+      welcome
     elsif save_input == 'exit'
       goodbye
-    elsif save_input.to_i.between
+    elsif save_input == 'clear'
+      ColorHex::Colors.clear_store
+      welcome
+    elsif save_input.to_i.between?(1, ColorHex::Colors.storage.length)
+      @color = ColorHex::Colors.storage[save_input.to_i - 1]
+      color_description(@color)
+
+    else
+      puts "I did not understand"
+      save_options
+    end
+
   end
 
   def save_list
-    ColorHex::Colors.storage.each_with_index do |color|
+    ColorHex::Colors.storage.each_with_index do |color, i|
       puts "#{i+1} #{color.name}"
     end
   end
@@ -96,8 +115,7 @@ class ColorHex::CLI
     if search_input == 'exit'
       goodbye
     elsif search_input == 'menu'
-      welcome_options
-      welcome_selection    
+      welcome   
     elsif search_input.length > 2 && search_input.gsub(/[A-Za-z]+/, '') == ''
       @search_result = ColorHex::Colors.all.select do |color|
         color.html_name.downcase.include?(search_input.downcase) || color.name.include?(search_input.downcase)
@@ -149,8 +167,7 @@ class ColorHex::CLI
     elsif selection == 'exit'
       goodbye
     elsif selection == 'menu'
-      welcome_options
-      welcome_selection
+      welcome
     else
       search_optons_3
     end
@@ -167,10 +184,14 @@ class ColorHex::CLI
     if html_input.to_i.between?(1, ColorHex::Colors.html_colors.length)
       @color = ColorHex::Colors.html_colors[html_input.to_i-1]
       color_description(@color)
+      puts "Enter 'save' to store the color"
+      html_color_options
+    elsif html_input == 'save'
+      @color.store
+      puts 'The color was saved'
       html_color_options
     elsif html_input == 'menu'
-      welcome_options
-      welcome_selection
+      welcome
     elsif html_input == 'list'
       ColorHex::Colors.list_html_colors
       html_color_options
@@ -201,14 +222,18 @@ class ColorHex::CLI
     hex_input = gets.strip
     
     if hex_input.gsub(/[0-9a-fA-F]{6}/, '') == ''
-      color = ColorHex::Colors.find_or_create_by_hex(hex_input)
-      color_description(color)
+      @color = ColorHex::Colors.find_or_create_by_hex(hex_input)
+      color_description(@color)
+      puts "Enter 'save' to store the color"
+      hex_options
+    elsif hex_input == 'save'
+      @color.store
+      puts 'The color was saved'
       hex_options
     elsif hex_input == 'exit'
       goodbye
     elsif hex_input == 'menu'
-      welcome_options
-      welcome_selection
+      welcome
     else 
       puts 'Please try again'
       hex_options
