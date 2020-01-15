@@ -62,7 +62,7 @@ class ColorHex::CLI
 
     welcome_options
     welcome_selection
-    # search_input = gets.strip
+  
   end
 
   def html_color_options
