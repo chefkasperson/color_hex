@@ -77,11 +77,6 @@ class ColorHex::CLI
       puts 'Please enter a valid input'
       search_options
     end
-    # puts 'Under Construction...'
-    # puts 'Come back soon'
-
-    # welcome_options
-    # welcome_selection
   end
   
   def display_search_result
@@ -91,7 +86,7 @@ class ColorHex::CLI
   end
 
   def search_options_2
-    if @search_result == nil
+    if @search_result == nil || @search_result == []
       puts 'No results found'
       search_options
     else
