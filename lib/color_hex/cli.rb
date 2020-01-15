@@ -66,8 +66,8 @@ class ColorHex::CLI
   end
 
   def save_options
-    puts "  Here are the colors you have saved:"
     if ColorHex::Colors.storage.count > 0
+      puts "  Here are the colors you have saved:"
       save_list
     else
       puts "  You do not have any colors saved"
@@ -91,7 +91,7 @@ class ColorHex::CLI
       ColorHex::Colors.clear_store
       welcome
     elsif save_input == 'u'
-      ColorHex::Colors.storage.delete(@color)
+      unsave_color
       save_options
     elsif save_input.to_i.between?(1, ColorHex::Colors.storage.length)
       @color = ColorHex::Colors.storage[save_input.to_i - 1]
@@ -101,9 +101,25 @@ class ColorHex::CLI
       puts "  I did not understand"
       save_options
     end
-
+    
   end
-
+  def unsave_color
+    puts '  Choose color you would like to delete'
+    unsave_input = gets.strip
+    if unsave_input.to_i.between?(1, ColorHex::Colors.storage.length)
+      @color = ColorHex::Colors.storage[save_input.to_i - 1]
+      ColorHex::Colors.storage.delete(@color)
+      puts '  Your color was deleted'
+      save_options
+    elsif unsave_input == 'exit'
+      goodbye
+    elsif unsave_input == 'menu'
+      welcome
+    else
+      unsave_color
+    end
+  end
+  
   def save_list
     ColorHex::Colors.storage.each_with_index do |color, i|
       puts "  #{i+1} #{color.name}"

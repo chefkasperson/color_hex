@@ -48,7 +48,7 @@ class ColorHex::Colors
 
   def self.list_html_colors
     self.html_colors.each_with_index do |color, i|
-      puts "#{i+1}. #{color.html_name}"
+      puts "  #{i+1}. #{color.html_name}"
     end
   end
 
