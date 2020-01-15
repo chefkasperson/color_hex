@@ -30,6 +30,7 @@ class ColorHex::CLI
     1. List all the named html colors.
     2. Search for a color based on the hex value.
     3. Search for a color based on a keyword.
+    4. To view saved colors
     Type 'exit' to leave.
     DOC
 
@@ -49,6 +50,8 @@ class ColorHex::CLI
       hex_options
     when '3'
       search_options
+    when '4'
+      save_options
     when 'exit'
       goodbye
     else

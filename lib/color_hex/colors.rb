@@ -22,6 +22,10 @@ class ColorHex::Colors
     @@all.clear
   end
 
+  def store
+    @@store << self
+  end
+
   def self.store
     @@store
   end
