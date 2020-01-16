@@ -33,7 +33,7 @@ class ColorHex::CLI
     3. Search for a color based on a keyword.
     4. To view saved colors
     Type 'exit' to leave.
-    
+
     DOC
 
   end
@@ -200,7 +200,7 @@ class ColorHex::CLI
     elsif selection == 'menu'
       welcome
     else
-      search_optons_3
+      search_options_3
     end
   end
 
