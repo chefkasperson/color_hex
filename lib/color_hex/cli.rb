@@ -17,11 +17,10 @@ class ColorHex::CLI
 
     DOC
     ColorHex::ColorScraper.import
-    welcome_options
-    welcome_selection
+    welcome
     goodbye
-    
   end
+
   
   def welcome_options
     puts <<-DOC 
@@ -62,6 +61,11 @@ class ColorHex::CLI
     
   end
   
+  def welcome
+    welcome_options
+    welcome_selection
+  end
+
   def html_colors_list_array
     @html_colors = []
     @page = 1
@@ -69,7 +73,7 @@ class ColorHex::CLI
       @html_colors << "  #{i+1}. #{color.html_name}"
     end
   end
-
+  
   def html_list
 
     case @page
@@ -96,143 +100,6 @@ class ColorHex::CLI
       html_list
     end
 
-  end
-  
-
-
-  def welcome
-    welcome_options
-    welcome_selection
-  end
-
-  def save_options
-    if ColorHex::Colors.storage.count > 0
-      puts ''
-      puts "  Here are the colors you have saved:"
-      save_list
-    else
-      puts ''
-      puts "  You do not have any colors saved"
-      welcome
-    end
-    save_options_2
-  end
-  
-  def save_options_2
-    puts <<-DOC
-    Enter the number to view the color, Enter 'u' to unsave a color, Enter 'clear' to unsave all colors
-    Enter 'menu' for main menu, Enter 'exit' to exit
-    DOC
-    save_input = gets.strip
-
-    if save_input == 'menu'
-      welcome
-    elsif save_input == 'exit'
-      goodbye
-    elsif save_input == 'clear'
-      ColorHex::Colors.clear_store
-      welcome
-    elsif save_input == 'u'
-      unsave_color
-      save_options
-    elsif save_input.to_i.between?(1, ColorHex::Colors.storage.length)
-      @color = ColorHex::Colors.storage[save_input.to_i - 1]
-      color_description(@color)
-      save_options_2
-    else
-      puts "  I did not understand"
-      save_options
-    end
-    
-  end
-  def unsave_color
-    puts ''
-    puts '  Choose color you would like to delete'
-    unsave_input = gets.strip
-    if unsave_input.to_i.between?(1, ColorHex::Colors.storage.length)
-      @color = ColorHex::Colors.storage[unsave_input.to_i - 1]
-      ColorHex::Colors.storage.delete(@color)
-      puts '  Your color was deleted'
-      save_options
-    elsif unsave_input == 'exit'
-      goodbye
-    elsif unsave_input == 'menu'
-      welcome
-    else
-      unsave_color
-    end
-  end
-  
-  def save_list
-    ColorHex::Colors.storage.each_with_index do |color, i|
-      puts "  #{i+1} #{color.name}"
-    end
-  end
-
-  def search_options
-    puts '  What keyword would you like to use:'
-
-    search_input = gets.strip
-    
-    if search_input == 'exit'
-      goodbye
-    elsif search_input == 'menu'
-      welcome   
-    elsif search_input.length > 2 && search_input.gsub(/[A-Za-z]+/, '') == ''
-      @search_result = ColorHex::Colors.all.select do |color|
-        color.html_name.downcase.include?(search_input.downcase) || color.name.include?(search_input.downcase)
-      end
-      search_options_2
-    else
-      puts '  Please enter a valid input'
-      search_options
-    end
-  end
-  
-  def display_search_result
-    @search_result.uniq.each_with_index do |color, i|
-      puts "  #{i+1}. #{color.name}"
-    end
-  end
-
-  def search_options_2
-    if @search_result == nil || @search_result == []
-      puts 'No results found'
-      search_options
-    else
-      display_search_result
-      search_options_3
-    end
-  end
-
-  def search_options_3
-    puts '  Enter the number for more information about the color'
-    selection = gets.strip
-    
-    if selection.to_i.between?(1, @search_result.length)
-      @color = @search_result[selection.to_i-1]
-      color_description(@color)
-      puts ''
-      puts <<-DOC
-      Enter 'menu' for main menu, 'result' to see the last search result, 'save' to store the result,
-      'new' for a new search, 'exit' to leave
-      DOC
-      search_options_3
-    elsif selection == 'result'
-      search_options_2
-    elsif selection == 'new'
-      search_options
-    elsif selection == 'save'
-      @color.store
-      puts '  The color was saved'
-      search_options_3
-    elsif selection == 'exit'
-      goodbye
-    elsif selection == 'menu'
-      welcome
-    else
-      search_options_3
-    end
   end
 
   def html_color_options
@@ -272,19 +139,6 @@ class ColorHex::CLI
 
   end
 
-  def color_description(color_object)
-    puts <<-DOC
-    Name: #{color_object.name}
-    HTML Name: #{color_object.html_name}
-    Hex Value: #{color_object.hex}
-    RGB Value: #{color_object.rgb}
-    HSV Value: #{color_object.hsv}
-    CMYK Value: #{color_object.cmyk}
-    Image Link: #{color_object.image_link}
-    DOC
-
-  end
-
   def hex_options
     puts '  Enter a Hex code to find more information:'
     hex_input = gets.strip
@@ -306,6 +160,150 @@ class ColorHex::CLI
       puts '  Please try again'
       hex_options
     end
+  end
+  
+  def search_options
+    puts '  What keyword would you like to use:'
+    
+    search_input = gets.strip
+    
+    if search_input == 'exit'
+      goodbye
+    elsif search_input == 'menu'
+      welcome   
+    elsif search_input.length > 2 && search_input.gsub(/[A-Za-z]+/, '') == ''
+      @search_result = ColorHex::Colors.all.select do |color|
+        color.html_name.downcase.include?(search_input.downcase) || color.name.include?(search_input.downcase)
+      end
+      search_options_2
+    else
+      puts '  Please enter a valid input'
+      search_options
+    end
+  end
+  
+  
+  def search_options_2
+    if @search_result == nil || @search_result == []
+      puts 'No results found'
+      search_options
+    else
+      display_search_result
+      search_options_3
+    end
+  end
+  
+  def search_options_3
+    puts '  Enter the number for more information about the color'
+    selection = gets.strip
+    
+    if selection.to_i.between?(1, @search_result.length)
+      @color = @search_result[selection.to_i-1]
+      color_description(@color)
+      puts ''
+      puts <<-DOC
+      Enter 'menu' for main menu, 'result' to see the last search result, 'save' to store the result,
+      'new' for a new search, 'exit' to leave
+      DOC
+      search_options_3
+    elsif selection == 'result'
+      search_options_2
+    elsif selection == 'new'
+      search_options
+    elsif selection == 'save'
+      @color.store
+      puts '  The color was saved'
+      search_options_3
+    elsif selection == 'exit'
+      goodbye
+    elsif selection == 'menu'
+      welcome
+    else
+      search_options_3
+    end
+  end
+
+  def display_search_result
+    @search_result.uniq.each_with_index do |color, i|
+      puts "  #{i+1}. #{color.name}"
+    end
+  end
+  
+  def save_options
+    if ColorHex::Colors.storage.count > 0
+      puts ''
+      puts "  Here are the colors you have saved:"
+      save_list
+    else
+      puts ''
+      puts "  You do not have any colors saved"
+      welcome
+    end
+    save_options_2
+  end
+  
+  def save_options_2
+    puts <<-DOC
+    Enter the number to view the color, Enter 'u' to unsave a color, Enter 'clear' to unsave all colors
+    Enter 'menu' for main menu, Enter 'exit' to exit
+    DOC
+    save_input = gets.strip
+
+    if save_input == 'menu'
+      welcome
+    elsif save_input == 'exit'
+      goodbye
+    elsif save_input == 'clear'
+      ColorHex::Colors.clear_store
+      welcome
+    elsif save_input == 'u'
+      unsave_color
+      save_options
+    elsif save_input.to_i.between?(1, ColorHex::Colors.storage.length)
+      @color = ColorHex::Colors.storage[save_input.to_i - 1]
+      color_description(@color)
+      save_options_2
+    else
+      puts "  I did not understand"
+      save_options
+    end 
+  end
+
+  def unsave_color
+    puts ''
+    puts '  Choose color you would like to delete'
+    unsave_input = gets.strip
+    if unsave_input.to_i.between?(1, ColorHex::Colors.storage.length)
+      @color = ColorHex::Colors.storage[unsave_input.to_i - 1]
+      ColorHex::Colors.storage.delete(@color)
+      puts '  Your color was deleted'
+      save_options
+    elsif unsave_input == 'exit'
+      goodbye
+    elsif unsave_input == 'menu'
+      welcome
+    else
+      unsave_color
+    end
+  end
+  
+  def save_list
+    ColorHex::Colors.storage.each_with_index do |color, i|
+      puts "  #{i+1} #{color.name}"
+    end
+  end
+
+  def color_description(color_object)
+    puts <<-DOC
+    Name: #{color_object.name}
+    HTML Name: #{color_object.html_name}
+    Hex Value: #{color_object.hex}
+    RGB Value: #{color_object.rgb}
+    HSV Value: #{color_object.hsv}
+    CMYK Value: #{color_object.cmyk}
+    Image Link: #{color_object.image_link}
+    DOC
+
   end
 
   def goodbye
