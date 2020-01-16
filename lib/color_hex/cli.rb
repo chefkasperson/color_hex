@@ -5,7 +5,7 @@ class ColorHex::CLI
   attr_accessor = :search_result, :color, :html_colors, :page
 
   def call
-    puts "Welcome to ..."
+    puts 'Welcome to ...'
     puts <<-DOC
 
      ____ ___  _     ___  ____    _   _ _______  __
@@ -21,7 +21,6 @@ class ColorHex::CLI
     goodbye
   end
 
-  
   def welcome_options
     puts <<-DOC 
 
@@ -58,7 +57,6 @@ class ColorHex::CLI
     else
       welcome
     end
-    
   end
   
   def welcome
@@ -232,11 +230,11 @@ class ColorHex::CLI
   def save_options
     if ColorHex::Colors.storage.count > 0
       puts ''
-      puts "  Here are the colors you have saved:"
+      puts '  Here are the colors you have saved:'
       save_list
     else
       puts ''
-      puts "  You do not have any colors saved"
+      puts '  You do not have any colors saved'
       welcome
     end
     save_options_2
@@ -264,7 +262,7 @@ class ColorHex::CLI
       color_description(@color)
       save_options_2
     else
-      puts "  I did not understand"
+      puts '  I did not understand'
       save_options
     end 
   end
@@ -307,7 +305,7 @@ class ColorHex::CLI
   end
 
   def goodbye
-    puts "  Thank you"
+    puts "  Thank you for using Color Hex!"
     exit
   end
   
