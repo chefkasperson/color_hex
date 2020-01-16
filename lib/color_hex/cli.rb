@@ -25,6 +25,7 @@ class ColorHex::CLI
   
   def welcome_options
     puts <<-DOC 
+
     Please select one of the following options:
     
     1. List all the named html colors.
@@ -32,6 +33,7 @@ class ColorHex::CLI
     3. Search for a color based on a keyword.
     4. To view saved colors
     Type 'exit' to leave.
+    
     DOC
 
   end
@@ -43,7 +45,7 @@ class ColorHex::CLI
     case welcome_input
     when '1'
       puts '  Here is the list of named html colors'
-      ColorHex::Colors.list_html_colors
+      list_html_colors
       html_color_options
     when '2'
       puts '  Please enter the hexadecimal color code you would like to search for:'
@@ -59,6 +61,13 @@ class ColorHex::CLI
     end
     
   end
+  
+  def list_html_colors
+    ColorHex::Colors.html_colors.each_with_index do |color, i|
+      puts "  #{i+1}. #{color.html_name}"
+    end
+  end
+
 
   def welcome
     welcome_options
@@ -67,9 +76,11 @@ class ColorHex::CLI
 
   def save_options
     if ColorHex::Colors.storage.count > 0
+      puts ''
       puts "  Here are the colors you have saved:"
       save_list
     else
+      puts ''
       puts "  You do not have any colors saved"
       welcome
     end
@@ -104,10 +115,11 @@ class ColorHex::CLI
     
   end
   def unsave_color
+    puts ''
     puts '  Choose color you would like to delete'
     unsave_input = gets.strip
     if unsave_input.to_i.between?(1, ColorHex::Colors.storage.length)
-      @color = ColorHex::Colors.storage[save_input.to_i - 1]
+      @color = ColorHex::Colors.storage[unsave_input.to_i - 1]
       ColorHex::Colors.storage.delete(@color)
       puts '  Your color was deleted'
       save_options

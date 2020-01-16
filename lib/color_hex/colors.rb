@@ -46,12 +46,6 @@ class ColorHex::Colors
     end
   end
 
-  def self.list_html_colors
-    self.html_colors.each_with_index do |color, i|
-      puts "  #{i+1}. #{color.html_name}"
-    end
-  end
-
   def self.find_by_hex(hex)
     self.all.detect { |color| color.hex == hex }
   end
