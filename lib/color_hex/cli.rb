@@ -2,7 +2,7 @@
 
 class ColorHex::CLI
 
-  attr_accessor = :search_result, :color
+  attr_accessor = :search_result, :color, :html_colors, :page
 
   def call
     puts "Welcome to ..."
@@ -45,8 +45,8 @@ class ColorHex::CLI
     case welcome_input
     when '1'
       puts '  Here is the list of named html colors'
-      list_html_colors
-      html_color_options
+      html_colors_list_array
+      html_list
     when '2'
       puts '  Please enter the hexadecimal color code you would like to search for:'
       hex_options
@@ -62,11 +62,39 @@ class ColorHex::CLI
     
   end
   
-  def list_html_colors
+  def html_colors_list_array
+    @html_colors = []
+    @page = 1
     ColorHex::Colors.html_colors.each_with_index do |color, i|
-      puts "  #{i+1}. #{color.html_name}"
+      @html_colors << "  #{i+1}. #{color.html_name}"
     end
   end
+
+  def html_list
+
+    case @page
+    when 1
+      puts @html_colors[0...30]
+      html_color_options
+    when 2
+      puts @html_colors[30...60]
+      html_color_options
+    when 3
+      puts @html_colors[60...90]
+      html_color_options
+    when 4
+      puts @html_colors[90...120]
+      html_color_options
+    when 5
+      puts @html_colors[120..143]
+      html_color_options
+    else
+      @page = 1
+      html_list
+    end
+
+  end
+  
 
 
   def welcome
@@ -207,6 +235,7 @@ class ColorHex::CLI
   def html_color_options
     puts <<-DOC
     Please enter the number of the color you would like more information on: OR
+    Type 'n' to see more results, 'p' to see previous results
     Type 'menu' for main menu, 'list' to return to the previous list, or 'exit' to exit  
     DOC
 
@@ -217,6 +246,12 @@ class ColorHex::CLI
       color_description(@color)
       puts "  Enter 'save' to store the color"
       html_color_options
+    elsif html_input == 'n'
+      @page += 1
+      html_list
+    elsif html_input == 'p'
+      @page -= 1
+      html_list
     elsif html_input == 'save'
       @color.store
       puts '  The color was saved'
