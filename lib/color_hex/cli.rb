@@ -180,7 +180,6 @@ class ColorHex::CLI
     end
   end
   
-  
   def search_options_2
     if @search_result == nil || @search_result == []
       puts 'No results found'
@@ -301,12 +300,10 @@ class ColorHex::CLI
     CMYK Value: #{color_object.cmyk}
     Image Link: #{color_object.image_link}
     DOC
-
   end
 
   def goodbye
     puts "  Thank you for using Color Hex!"
     exit
   end
-  
 end
