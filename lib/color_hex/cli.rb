@@ -26,7 +26,7 @@ class ColorHex::CLI
 
     Please select one of the following options:
     
-    1. List all the preloaded colors.
+    1. List all the preloaded html colors.
     2. Search for a color based on the hex value.
     3. Search for a color based on a keyword.
     4. To view saved colors
@@ -68,7 +68,7 @@ class ColorHex::CLI
     @html_colors = []
     @page = 1
     ColorHex::Colors.html_colors.each_with_index do |color, i|
-      @html_colors << "  #{i+1}. #{color.name}"
+      @html_colors << "  #{i+1}. #{color.html_name}"
     end
   end
   
