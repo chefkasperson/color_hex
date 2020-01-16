@@ -74,19 +74,22 @@ class ColorHex::CLI
 
     case @page
     when 1
-      puts @html_colors[0...30]
+      puts @html_colors[0...25]
       html_color_options
     when 2
-      puts @html_colors[30...60]
+      puts @html_colors[25...50]
       html_color_options
     when 3
-      puts @html_colors[60...90]
+      puts @html_colors[50...75]
       html_color_options
     when 4
-      puts @html_colors[90...120]
+      puts @html_colors[75...100]
       html_color_options
     when 5
-      puts @html_colors[120..143]
+      puts @html_colors[100...125]
+      html_color_options
+    when 6
+      puts @html_colors[125..143]
       html_color_options
     else
       @page = 1
@@ -259,8 +262,7 @@ class ColorHex::CLI
     elsif html_input == 'menu'
       welcome
     elsif html_input == 'list'
-      ColorHex::Colors.list_html_colors
-      html_color_options
+      html_list
     elsif html_input == 'exit'
       goodbye
     else
