@@ -16,7 +16,7 @@ class ColorHex::CLI
 
 
     DOC
-    ColorHex::ColorScraper.import
+    ColorHex::ColorScraper.scrape
     welcome
     goodbye
   end
@@ -111,6 +111,7 @@ class ColorHex::CLI
 
     if html_input.to_i.between?(1, ColorHex::Colors.html_colors.length)
       @color = ColorHex::Colors.html_colors[html_input.to_i-1]
+      ColorHex::ColorScraper.import_details(@color)
       color_description(@color)
       puts "  Enter 'save' to store the color"
       html_color_options

@@ -18,7 +18,7 @@ class ColorHex::Colors
     @@all
   end
 
-  def reset_all
+  def self.reset_all
     @@all.clear
   end
 
@@ -47,8 +47,13 @@ class ColorHex::Colors
   end
 
   def self.find_by_hex(hex)
-    self.all.detect { |color| color.hex == hex }
+    x = self.all.detect { |color| color.hex == hex }
+    if x && x.hsv.blank?
+      ColorHex::ColorScraper.import_details(x)
+    end
+    x
   end
+
 
   def self.create_by_hex(hex)
     doc = RestClient.get("https://www.thecolorapi.com/id?hex=#{hex}")
